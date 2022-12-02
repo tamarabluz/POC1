@@ -1,0 +1,14 @@
+spring:
+  main:
+    banner-mode: off
+  output:
+    ansi:
+      enabled: ALWAYS
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:${port}/${db}?createDatabaseIfNotExist=true
+    username: ${user}
+    password: ${password}
