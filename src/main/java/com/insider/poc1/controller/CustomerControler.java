@@ -1,16 +1,18 @@
 package com.insider.poc1.controller;
 
 import com.insider.poc1.dtos.request.CustomerRequest;
-import com.insider.poc1.dtos.response.CustomerResponse;
 import com.insider.poc1.model.CustomerModel;
 import com.insider.poc1.service.CustomerService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,8 +39,9 @@ public class CustomerControler {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customerModel));
     }
     @GetMapping
-    public ResponseEntity<List<CustomerModel>> getAllCustomer(){
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll());
+    public ResponseEntity<Page<CustomerModel>> getAllCustomer(@PageableDefault(page = 0,
+            size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable ){
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneCustomer(@PathVariable(value = "id") UUID id){

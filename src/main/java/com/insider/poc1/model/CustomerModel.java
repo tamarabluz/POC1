@@ -37,8 +37,8 @@ public class CustomerModel implements Serializable {
     @Enumerated(EnumType.STRING)
     private DocumentType documentType;
 //    @OneToMany
-//    @JoinColumn(name = "idAddress", referencedColumnName = "id")
-//    private AddressModel addressModel;
+//    @JoinColumn(mappedBy ="customer", fetch = FetchType.EAGER)
+//    private List<AddressModel> addressList = new ArrayList<>();
 
 
 

@@ -2,10 +2,12 @@ package com.insider.poc1.service;
 
 import com.insider.poc1.model.CustomerModel;
 import com.insider.poc1.repository.CustomerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,8 +29,8 @@ public class CustomerService {
     }
 
 
-    public List<CustomerModel> findAll() {
-        return customerRepository.findAll();
+    public Page<CustomerModel> findAll(Pageable pageable) {
+        return customerRepository.findAll(pageable);
     }
 
     public Optional<CustomerModel> findById(UUID id) {
