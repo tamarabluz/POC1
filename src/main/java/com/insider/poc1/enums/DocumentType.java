@@ -1,6 +1,6 @@
 package com.insider.poc1.enums;
 
-public enum tipo {
+public enum DocumentType {
     PJ,
     PF
 }

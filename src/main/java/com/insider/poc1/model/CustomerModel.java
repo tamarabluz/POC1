@@ -1,15 +1,22 @@
 package com.insider.poc1.model;
 
+import com.insider.poc1.enums.DocumentType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
-
-public class CustomerModel {
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CustomerModel implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "hibernate-uuid")  //para mysql
     @Type(type="org.hibernate.type.UUIDCharType")  //para mysql
@@ -17,19 +24,22 @@ public class CustomerModel {
     private UUID id;
 
     @Column
-    private String telefone;
+    private String name;
+
+    @Column
+    private String email;
+    @Column
+    private String phoneNumber;
     @Column
     @CPF
-    private String cpf;
-    @Column
     @CNPJ
-    private String cnpj;
+    private String document;
     @Column
-    private String endereco;
-    @Column
-    private String tipo;
-
-
+    @Enumerated(EnumType.STRING)
+    private DocumentType documentType;
+    @OneToMany
+    @JoinColumn(name = "idAddress", referencedColumnName = "id")
+    private AddressModel addressModel;
 
 
 

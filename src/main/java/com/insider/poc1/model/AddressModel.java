@@ -1,12 +1,20 @@
 package com.insider.poc1.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AddressModel {
 
     @Id
@@ -16,15 +24,16 @@ public class AddressModel {
     private UUID id;
 
     @Column
-    private String rua;
+    private String street;
     @Column
-    private String numero;
+    private String number;
     @Column
-    private String bairro;
+    private String district;
     @Column
-    private String cidade;
+    private String city;
     @Column
-    private String cep;
+    private String zipCode;
     @Column
-    private String estado;
+    private String state;
+
 }
