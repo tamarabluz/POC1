@@ -32,14 +32,13 @@ public class CustomerModel implements Serializable {
     private String phoneNumber;
     @Column
     @CPF
-    @CNPJ
     private String document;
     @Column
     @Enumerated(EnumType.STRING)
     private DocumentType documentType;
-    @OneToMany
-    @JoinColumn(name = "idAddress", referencedColumnName = "id")
-    private AddressModel addressModel;
+//    @OneToMany
+//    @JoinColumn(name = "idAddress", referencedColumnName = "id")
+//    private AddressModel addressModel;
 
 
 
