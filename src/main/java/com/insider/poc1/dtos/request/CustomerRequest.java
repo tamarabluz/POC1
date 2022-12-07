@@ -1,10 +1,16 @@
 package com.insider.poc1.dtos.request;
 
+import com.insider.poc1.config.documents.ClienteGroupSequenceProvider;
+import com.insider.poc1.config.documents.CnpjGroup;
+import com.insider.poc1.config.documents.CpfGroup;
 import com.insider.poc1.enums.DocumentType;
 import com.insider.poc1.model.AddressModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.group.GroupSequenceProvider;
 
 import javax.validation.constraints.NotBlank;
 
@@ -12,15 +18,18 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@GroupSequenceProvider(ClienteGroupSequenceProvider.class)
 public class CustomerRequest {
 
-    @NotBlank(message = "O campo nome não pode estar em branco")
+    @NotBlank
     private String name;
-    @NotBlank(message = "O campo email não pode estar em branco")
+    @NotBlank
     private String email;
-    @NotBlank(message = "O campo número não pode estar em branco")
+    @NotBlank
     private String phoneNumber;
-    @NotBlank(message = "Documento válido deve ser informado.")
+    @NotBlank
+    @CPF(groups = CpfGroup.class)
+    @CNPJ(groups = CnpjGroup.class)
     private String document;
     private DocumentType documentType;
     //private AddressModel addressModel;

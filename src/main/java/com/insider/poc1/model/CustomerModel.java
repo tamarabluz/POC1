@@ -19,7 +19,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@GroupSequenceProvider(ClienteGroupSequenceProvider.class)
+
 public class CustomerModel implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,8 +36,6 @@ public class CustomerModel implements Serializable {
     @Column
     private String phoneNumber;
     @Column
-    @CPF(groups = CpfGroup.class)
-    @CNPJ(groups = CnpjGroup.class)
     private String document;
     @Column
     @Enumerated(EnumType.STRING)

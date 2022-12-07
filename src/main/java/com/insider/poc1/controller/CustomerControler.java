@@ -1,8 +1,11 @@
 package com.insider.poc1.controller;
 
 import com.insider.poc1.dtos.request.CustomerRequest;
+import com.insider.poc1.enums.DocumentType;
 import com.insider.poc1.model.CustomerModel;
 import com.insider.poc1.service.CustomerService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,16 +20,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/poc1")
+@RequestMapping("/customers")
 public class CustomerControler {
 
     final CustomerService customerService;
 
     public CustomerControler(CustomerService customerService) {
-        this.customerService = customerService;}
-
+        this.customerService = customerService;
+    }
 
     @PostMapping
     public ResponseEntity<Object> saveCustomer(@RequestBody @Valid CustomerRequest customerRequest){
@@ -58,6 +62,12 @@ public class CustomerControler {
         }
         return ResponseEntity.status(HttpStatus.OK).body(customerModelOptional.get());
     }
+    @GetMapping("/document-type/{documentType}")
+    public ResponseEntity<Page<CustomerModel>> getAllCustomerByType(@PageableDefault(page = 0,
+            size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, @PathVariable DocumentType documentType){
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable, documentType));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletecustomer(@PathVariable(value = "id") UUID id){
         Optional<CustomerModel> customerModelOptional = customerService.findById(id);

@@ -12,13 +12,10 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class CustomerResponse {
 
-        @NotEmpty
         private String name;
-        @NotEmpty
+
         private String email;
-        @NotEmpty
-        private String phoneNumber;
-        @NotEmpty
-        private AddressModel addressModel;
+
+
 }
 
