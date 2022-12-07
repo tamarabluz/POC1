@@ -29,16 +29,23 @@ public class CustomerService {
     }
 
 
-    public Page<CustomerModel> findAll(Pageable pageable) {
+    public boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
+    }
+    public boolean existsByPhoneNumber(String phoneNumber) {
+        return customerRepository.existsByPhoneNumber(phoneNumber);
+    }                                                              public Page<CustomerModel> findAll(Pageable pageable) {
         return customerRepository.findAll(pageable);
     }
-
     public Optional<CustomerModel> findById(UUID id) {
         return customerRepository.findById(id);
     }
-
     @Transactional
     public void delete(CustomerModel customerModel) {
         customerRepository.delete(customerModel);
     }
+
+
+
+
 }

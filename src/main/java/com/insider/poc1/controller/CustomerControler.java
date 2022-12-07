@@ -34,6 +34,13 @@ public class CustomerControler {
         if(customerService.existsByDocument(customerRequest.getDocument())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Document is already in use!");
         }
+        if(customerService.existsByEmail(customerRequest.getEmail())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Email is already in use!");
+        }
+        if(customerService.existsByPhoneNumber(customerRequest.getPhoneNumber())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Number Phone is already in use!");
+        }
+
         var customerModel = new CustomerModel();
         BeanUtils.copyProperties(customerRequest, customerModel);//converte dto em model;
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customerModel));
