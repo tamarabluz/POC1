@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -22,9 +24,9 @@ public class AddressModel {
     private UUID id;
 
 //    @JsonIgnore
-//    @ManyToOne
-//    @Column
-//    private
+//    @OneToMany
+//    @JoinColumn(mappedBy ="customer", fetch = FetchType.LAZY)
+//    private List<AddressModel> addressList = new ArrayList<>();
 
     @Column
     private String street;

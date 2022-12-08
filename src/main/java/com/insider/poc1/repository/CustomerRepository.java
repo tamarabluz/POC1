@@ -18,4 +18,5 @@ public interface CustomerRepository extends JpaRepository<CustomerModel, UUID> {
     boolean existsByPhoneNumber(String phoneNumber);
 
     Page<CustomerModel> findAllCustomerByDocumentType(Pageable pageable, DocumentType documentType);
+
 }
