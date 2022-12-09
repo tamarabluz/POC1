@@ -1,29 +1,32 @@
 package com.insider.poc1.dtos.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressRequest {
     @NotBlank
-    private String street;
+    //@Pattern(regexp = "\\d{5}-\\d{3}")
+    private String cep;
+
+    //@JsonIgnore
+
+    private String logradouro;
+
+    private String bairro;
     @NotBlank
-    private String number;
-    @NotBlank
-    private String district;
-    @NotBlank
-    private String city;
-    @Pattern(regexp = "\\d{5}-\\d{3}")
-    @NotBlank
-    private String zipCode;
-    @NotBlank
-    private String state;
+    private String complemento;
+
+    private String localidade;
+   
+    private String uf;
+    private CustomerRequest customerRequest;
+
 
 }

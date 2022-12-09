@@ -23,6 +23,8 @@ import java.util.UUID;
 public class CustomerRequest {
 
     @NotBlank
+    UUID id;
+    @NotBlank
     private String name;
     @NotBlank
     @Email
@@ -35,7 +37,6 @@ public class CustomerRequest {
     private String document;
     private DocumentType documentType;
 
-    //private AddressModel addressModel;
 }
 
 

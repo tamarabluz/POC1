@@ -1,11 +1,8 @@
 package com.insider.poc1.controller;
 
 import com.insider.poc1.dtos.request.AddressRequest;
-import com.insider.poc1.dtos.request.CustomerRequest;
 import com.insider.poc1.dtos.response.AddressResponse;
-import com.insider.poc1.dtos.response.CustomerResponse;
 import com.insider.poc1.model.AddressModel;
-import com.insider.poc1.model.CustomerModel;
 import com.insider.poc1.service.AddressService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,9 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.UUID;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/address")
 public class AddressControler {
@@ -31,8 +29,8 @@ public class AddressControler {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AddressResponse saveAddress(@RequestBody @Valid AddressRequest addressRequest) {
-        return (mapper.map(addressService.save(addressRequest), AddressResponse.class));
+    public AddressResponse saveAddress(@RequestBody @Valid AddressRequest addressRequest) throws IOException {
+        return (mapper.map(addressService.searchZipCode(addressRequest), AddressResponse.class));
     }
     @GetMapping
     public ResponseEntity<Page<AddressResponse>> getAllAddress(@PageableDefault(page = 0,

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 @Entity
 @Data
@@ -33,10 +35,7 @@ public class CustomerModel implements Serializable {
     @Column
     @Enumerated(EnumType.STRING)
     private DocumentType documentType;
-//    @OneToMany
-//    @JoinColumn(mappedBy ="customer", fetch = FetchType.LAZY)
-//    private List<AddressModel> addressList = new ArrayList<>();
-
-
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customerModel", fetch = FetchType.LAZY)
+    private List<AddressModel> addressList = new ArrayList<>();
 
 }

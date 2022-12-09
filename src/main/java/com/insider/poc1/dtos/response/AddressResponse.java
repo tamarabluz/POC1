@@ -1,23 +1,21 @@
 package com.insider.poc1.dtos.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class AddressResponse {
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class AddressRequest {
+    private String cep;
 
-        private String district;
+    private String bairro;
 
-        private String city;
+    private String localidade;
 
-        private String zipCode;
+    private String uf;
 
-        private String state;
-
-    }
 }

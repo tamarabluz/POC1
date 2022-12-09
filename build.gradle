@@ -25,8 +25,10 @@ dependencies {
 
 	implementation 'mysql:mysql-connector-java'
     implementation 'org.modelmapper:modelmapper:3.1.0'
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10'
 
-    compileOnly 'org.projectlombok:lombok'
+
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
