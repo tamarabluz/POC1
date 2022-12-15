@@ -6,7 +6,6 @@ import com.insider.poc1.model.CustomerModel;
 import com.insider.poc1.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,6 @@ public class CustomerService {
 
     public CustomerModel update(CustomerRequest customerRequest){
         var customerModel = new CustomerModel();
-        BeanUtils.copyProperties(customerRequest, customerModel);
       if(existsById(customerModel.getId())){
           return customerRepository.save(mapper.map(customerRequest, CustomerModel.class));
       }else{
@@ -78,11 +76,6 @@ public class CustomerService {
     }
     public Optional<CustomerModel> findById(UUID id) {
         return customerRepository.findById(id);
-    }
-
-    @Transactional
-    public void delete(CustomerModel customerModel) {
-        customerRepository.delete(customerModel);
     }
      public Page<CustomerModel> findAll(Pageable pageable, DocumentType documentType) {
          return customerRepository.findAllCustomerByDocumentType(pageable, documentType);

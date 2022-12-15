@@ -12,25 +12,23 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/address")
-public class AddressControler {
+@RequestMapping("/addresses")
+public class AddressController {
 
     private final AddressService addressService;
     private final ModelMapper mapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AddressResponse saveAddress(@RequestBody @Valid AddressRequest addressRequest) throws IOException {
-        return (mapper.map(addressService.searchZipCode(addressRequest), AddressResponse.class));
+    public AddressResponse save(@RequestBody @Valid AddressRequest addressRequest)  {
+        return (mapper.map(addressService.save(addressRequest), AddressResponse.class));
     }
     @GetMapping
     public ResponseEntity<Page<AddressResponse>> getAllAddress(@PageableDefault(page = 0,
@@ -58,6 +56,9 @@ public class AddressControler {
         addressService.update(new AddressRequest());
         return mapper.map(addressService.findAllId(id), AddressResponse.class);
     }
-
-
+    @PatchMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AddressResponse addNewAddress(@RequestBody @Valid AddressRequest addressRequest){
+        return (mapper.map(addressService.addNewAddress(addressRequest), AddressResponse.class));
+    }
 }

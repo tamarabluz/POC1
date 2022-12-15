@@ -17,13 +17,9 @@ import java.util.UUID;
 
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @GroupSequenceProvider(ClienteGroupSequenceProvider.class)
 public class CustomerRequest {
 
-    @NotBlank
-    UUID id;
     @NotBlank
     private String name;
     @NotBlank

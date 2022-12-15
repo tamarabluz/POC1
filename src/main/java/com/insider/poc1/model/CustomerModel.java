@@ -1,5 +1,7 @@
 package com.insider.poc1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.insider.poc1.enums.DocumentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +37,7 @@ public class CustomerModel implements Serializable {
     @Column
     @Enumerated(EnumType.STRING)
     private DocumentType documentType;
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customerModel", fetch = FetchType.LAZY)
-    private List<AddressModel> addressList = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customerModel")
+    private List<AddressModel> addressList = new ArrayList<>();
 }

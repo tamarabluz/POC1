@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;;
+import javax.validation.Valid;
 import java.util.*;
 
 
@@ -67,5 +67,6 @@ public class CustomerControler {
         customerService.update(new CustomerRequest());
         return mapper.map(customerService.findAllId(id), CustomerResponse.class);
     }
+
 
 }

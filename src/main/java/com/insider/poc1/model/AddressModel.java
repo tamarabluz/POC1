@@ -1,5 +1,6 @@
 package com.insider.poc1.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.insider.poc1.dtos.response.CustomerResponse;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,6 @@ import java.util.UUID;
 @Data
 public class AddressModel {
 
-
-
     @Id
     @GeneratedValue(generator = "hibernate-uuid")  //para mysql
     @Type(type = "org.hibernate.type.UUIDCharType")  //para mysql
@@ -33,11 +32,13 @@ public class AddressModel {
     @Column
     private String bairro;
     @Column
-    private String complemento;
+    private int numero;
     @Column
     private String localidade;
     @Column
     private String uf;
+    @Column
+    private Boolean isAddressPrincipal;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private CustomerModel customerModel;
