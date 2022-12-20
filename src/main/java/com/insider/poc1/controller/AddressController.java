@@ -4,7 +4,6 @@ import com.insider.poc1.dtos.request.AddressRequest;
 import com.insider.poc1.dtos.response.AddressResponse;
 import com.insider.poc1.model.AddressModel;
 import com.insider.poc1.service.AddressService;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +17,16 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/addresses")
 public class AddressController {
 
     private final AddressService addressService;
     private final ModelMapper mapper;
+
+    public AddressController(AddressService addressService, ModelMapper mapper) {
+        this.addressService = addressService;
+        this.mapper = mapper;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

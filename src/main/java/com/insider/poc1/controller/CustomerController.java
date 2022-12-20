@@ -48,7 +48,7 @@ public class CustomerController {
     }
 
     @GetMapping("/document-type/{documentType}")
-    public ResponseEntity<Page<CustomerModel>> getAllCustomerByType(@PageableDefault(page = 0,
+    public ResponseEntity<Page<CustomerResponse>> getAllCustomerByType(@PageableDefault(page = 0,
             size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, @PathVariable DocumentType documentType) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable, documentType));
     }

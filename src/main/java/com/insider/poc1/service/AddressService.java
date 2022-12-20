@@ -7,8 +7,8 @@ import com.insider.poc1.exception.ExceptionConflict;
 import com.insider.poc1.model.AddressModel;
 import com.insider.poc1.repository.AddressRepository;
 import com.insider.poc1.repository.CustomerRepository;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ import java.util.UUID;
 
 @Service
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AddressService {
 
     private final CustomerRepository customerRepository;
@@ -65,7 +65,7 @@ public class AddressService {
         } catch (Exception e) {
             throw new RuntimeException("Invalid Cep.");
         }
-        if (existsByLogradouroNumero(addressRequest.getLogradouro(), addressRequest.getNumero())){
+        if (existsByLogradouroAndNumero(addressRequest.getLogradouro(), addressRequest.getNumero())){
             throw new ExceptionConflict("Conflict: Logradouro and numero is already in use!");
         }
         if (customer.getAddressList().isEmpty()) {
@@ -78,8 +78,8 @@ public class AddressService {
         return mapper.map(save, AddressResponse.class);
     }
 
-    private boolean existsByLogradouroNumero(String logradouro, int numero)  {
-        return addressRepository.existsByLogradouroNumero(logradouro, numero);
+    private boolean existsByLogradouroAndNumero(String logradouro, int numero)  {
+        return addressRepository.existsByLogradouroAndNumero(logradouro, numero);
     }
 
 

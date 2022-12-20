@@ -25,8 +25,6 @@ public class CustomerService {
   private final ModelMapper mapper;
 
 
-
-
     @Transactional//garante que se tudo volte ao normal, que não tenha dados quebrados;
     public CustomerResponse save(CustomerRequest customerRequest) {
 
@@ -47,9 +45,7 @@ public class CustomerService {
 
     }
 
-    private boolean existsByDocumentType(DocumentType documentType) {
-        return customerRepository.existsByDocumentType();
-    }
+
 
     public CustomerRequest findAllId(UUID id){
       return customerRepository.findById(id)
@@ -88,15 +84,21 @@ public class CustomerService {
     public boolean existsById(UUID id){
       return customerRepository.existsById(id);
     }
-    public Page<CustomerModel> findAll(Pageable pageable) {
-        return customerRepository.findAll(pageable);
+    public Page<CustomerResponse> findAll(Pageable pageable) {
+        return customerRepository.findAll(pageable)
+                .map(c -> mapper.map(c, CustomerResponse.class));
     }
-    public Optional<CustomerModel> findById(UUID id) {
-        return customerRepository.findById(id);
+    public Optional<CustomerResponse> findById(UUID id) {
+        return customerRepository.findById(id)
+                .map(c -> mapper.map(c, CustomerResponse.class));
     }
-     public Page<CustomerModel> findAll(Pageable pageable, DocumentType documentType) {
-         return customerRepository.findAllCustomerByDocumentType(pageable, documentType);
+     public Page<CustomerResponse> findAll(Pageable pageable, DocumentType documentType) {
+         return customerRepository.findAllCustomerByDocumentType(pageable, documentType)
+                 .map(c -> mapper.map(c, CustomerResponse.class));
      }
+    private boolean existsByDocumentType(DocumentType documentType) {
+        return customerRepository.existsByDocumentType(documentType);
+    }
 
 
 }

@@ -12,7 +12,7 @@ import org.hibernate.validator.group.GroupSequenceProvider;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 
 
 @Data
@@ -26,13 +26,12 @@ public class CustomerRequest {
     @Email
     private String email;
     @NotBlank(message = "Phone Number")
-    @Pattern(regexp = "(\\d{2}) \\d{4}-\\d{4}")
     private String phoneNumber;
     @NotBlank(message = "Document")
     @CPF(groups = CpfGroup.class)
     @CNPJ(groups = CnpjGroup.class)
     private String document;
-    @NotBlank(message = "Document Type.")
+    @NotNull(message = "Document Type.")
     private DocumentType documentType;
 
 }

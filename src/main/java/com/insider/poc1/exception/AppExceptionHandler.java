@@ -9,18 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@ControllerAdvice// anotação para escutar as exceções;
+@RestControllerAdvice// anotação para escutar as exceções;
 //classe extendida para tratamento das exceções;
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -82,13 +80,13 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             return fieldError.getDefaultMessage().concat(" Format invalid");
         }
         if (fieldError.getCode().equals(CONSTANT_VALIDATION_EMAIL)) {
-        return fieldError.getDefaultMessage();
+        return fieldError.getDefaultMessage().concat("Format invalid");
     }
         if (fieldError.getCode().equals(CONSTANT_VALIDATION_CNPJ)) {
-            return fieldError.getDefaultMessage();
+            return fieldError.getDefaultMessage().concat("Format invalid");
         }
         if (fieldError.getCode().equals(CONSTANT_VALIDATION_CPF)) {
-            return fieldError.getDefaultMessage();
+            return fieldError.getDefaultMessage().concat("Format innvalid");
         }
         return fieldError.toString()
 ;    }

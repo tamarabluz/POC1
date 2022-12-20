@@ -1,6 +1,5 @@
 package com.insider.poc1.dtos.response;
 
-import com.insider.poc1.model.AddressModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ public class CustomerResponse {
         private String name;
 
         private String email;
-        private List<AddressModel> addressList = new ArrayList<>();
+        private List<AddressResponse> addressList = new ArrayList<>();
 
 
 }
