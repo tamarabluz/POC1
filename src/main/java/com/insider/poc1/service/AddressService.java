@@ -2,12 +2,15 @@ package com.insider.poc1.service;
 
 import com.google.gson.Gson;
 import com.insider.poc1.dtos.request.AddressRequest;
+import com.insider.poc1.dtos.response.AddressResponse;
+import com.insider.poc1.exception.ExceptionConflict;
 import com.insider.poc1.model.AddressModel;
 import com.insider.poc1.repository.AddressRepository;
 import com.insider.poc1.repository.CustomerRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,7 +36,7 @@ public class AddressService {
     private final ModelMapper mapper;
 
     @Transactional//garante que se tudo volte ao normal, que não tenha dados quebrados;
-    public AddressModel save(AddressRequest addressRequest) {
+    public AddressResponse save(AddressRequest addressRequest) {
 
         var customer = customerRepository.findById(addressRequest.getCustomerModelId())
                 .orElseThrow(() -> new RuntimeException("Customer not foud."));
@@ -62,33 +65,43 @@ public class AddressService {
         } catch (Exception e) {
             throw new RuntimeException("Invalid Cep.");
         }
+        if (existsByLogradouroNumero(addressRequest.getLogradouro(), addressRequest.getNumero())){
+            throw new ExceptionConflict("Conflict: Logradouro and numero is already in use!");
+        }
         if (customer.getAddressList().isEmpty()) {
             addressRequest.setIsAddressPrincipal(true);
         }
         if (customer.getAddressList().size() >= 5) {
             throw new RuntimeException("You already have 5 addresses in use");
         }
-//        addressRequest.setCustomerId(customer.getId());
-        return addressRepository.save(mapper.map(addressRequest, AddressModel.class));
+        AddressModel save = addressRepository.save(mapper.map(addressRequest, AddressModel.class));
+        return mapper.map(save, AddressResponse.class);
     }
+
+    private boolean existsByLogradouroNumero(String logradouro, int numero)  {
+        return addressRepository.existsByLogradouroNumero(logradouro, numero);
+    }
+
 
     public AddressRequest findAllId(UUID id) {
         return addressRepository.findById(id)
                 .map(address -> mapper.map(address, AddressRequest.class))
-                .orElseThrow(() -> new RuntimeException("Address not found."));
+                .orElseThrow(() -> new EmptyResultDataAccessException(1));
     }
 
     @Transactional
     public void deleteById(UUID id) {
         Optional<AddressModel> addressModelOptional = addressRepository.findById(id);
-        addressModelOptional.orElseThrow(() -> new RuntimeException("Address not foud."));
+        addressModelOptional.orElseThrow(() -> new EmptyResultDataAccessException(1));
         addressRepository.deleteById(id);
     }
 
-    public AddressModel update(AddressRequest addressRequest) {
+    public AddressResponse update(UUID id, AddressRequest addressRequest) {
         var addressModel = new AddressModel();
         if (existsById(addressModel.getId())) {
-            return addressRepository.save(mapper.map(addressRequest, AddressModel.class));
+            AddressModel save = addressRepository.save(mapper.map(addressRequest, AddressModel.class));
+            return mapper.map(save, AddressResponse.class);
+
         } else {
             throw new RuntimeException("Address not foud.");
         }
@@ -107,9 +120,9 @@ public class AddressService {
         return addressRepository.existsById(id);
     }
 
-
-    public AddressModel addNewAddress(AddressRequest addressRequest) {
+    public AddressResponse AddressUpdate(UUID id) {
         var addressModel = new AddressModel();
+        AddressModel byId = findById(id).get();
         existsById(addressModel.getId());
         addressModel.getCustomerModel().getAddressList()
                 .forEach(address -> {
@@ -117,7 +130,8 @@ public class AddressService {
                     addressRepository.save(address);
                 });
         addressModel.setIsAddressPrincipal(true);
-        return addressRepository.save(mapper.map(addressRequest, AddressModel.class));
+        AddressModel save = addressRepository.save(byId);
+        return mapper.map(save, AddressResponse.class);
     }
 
 }

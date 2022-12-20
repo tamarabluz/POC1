@@ -23,7 +23,7 @@ import java.util.*;
 @AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/customers")
-public class CustomerControler {
+public class CustomerController {
 
     private final CustomerService customerService;
     private final ModelMapper mapper;
@@ -64,7 +64,7 @@ public class CustomerControler {
     public CustomerResponse updateCustomer(@PathVariable(value = "id") UUID id,
                                            @RequestBody @Valid CustomerModel customerModel) {
         customerModel.setId(id);
-        customerService.update(new CustomerRequest());
+        customerService.update(id, new CustomerRequest());
         return mapper.map(customerService.findAllId(id), CustomerResponse.class);
     }
 

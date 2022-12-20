@@ -4,33 +4,35 @@ import com.insider.poc1.config.documents.ClienteGroupSequenceProvider;
 import com.insider.poc1.config.documents.CnpjGroup;
 import com.insider.poc1.config.documents.CpfGroup;
 import com.insider.poc1.enums.DocumentType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 import org.hibernate.validator.group.GroupSequenceProvider;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.UUID;
+import javax.validation.constraints.Pattern;
 
 
 @Data
 @GroupSequenceProvider(ClienteGroupSequenceProvider.class)
 public class CustomerRequest {
 
-    @NotBlank
+    @NotBlank(message = "Name")
+    @Length(message = "NAME", min = 10, max = 50)
     private String name;
-    @NotBlank
+    @NotBlank(message = "Email")
     @Email
     private String email;
-    @NotBlank
+    @NotBlank(message = "Phone Number")
+    @Pattern(regexp = "(\\d{2}) \\d{4}-\\d{4}")
     private String phoneNumber;
-    @NotBlank
+    @NotBlank(message = "Document")
     @CPF(groups = CpfGroup.class)
     @CNPJ(groups = CnpjGroup.class)
     private String document;
+    @NotBlank(message = "Document Type.")
     private DocumentType documentType;
 
 }

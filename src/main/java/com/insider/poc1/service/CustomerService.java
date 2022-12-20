@@ -1,16 +1,21 @@
 package com.insider.poc1.service;
 
 import com.insider.poc1.dtos.request.CustomerRequest;
+import com.insider.poc1.dtos.response.CustomerResponse;
 import com.insider.poc1.enums.DocumentType;
+import com.insider.poc1.exception.ExceptionConflict;
 import com.insider.poc1.model.CustomerModel;
 import com.insider.poc1.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -23,38 +28,50 @@ public class CustomerService {
 
 
     @Transactional//garante que se tudo volte ao normal, que não tenha dados quebrados;
-    public CustomerModel save(CustomerRequest customerRequest) {
+    public CustomerResponse save(CustomerRequest customerRequest) {
 
             if (existsByDocument(customerRequest.getDocument())) {
-                throw new RuntimeException("Conflict: Document is already in use!");
+                throw new ExceptionConflict("Conflict: Document is already in use!");
             }
             if (existsByEmail(customerRequest.getEmail())) {
-                throw new RuntimeException("Conflict: Email is already in use!");
+                throw new ExceptionConflict("Conflict: Email is already in use!");
             }
             if (existsByPhoneNumber(customerRequest.getPhoneNumber())) {
-               throw new RuntimeException("Conflict: Phone Number is already in use!");
+               throw new ExceptionConflict("Conflict: Phone Number is already in use!");
             }
-            return customerRepository.save(mapper.map(customerRequest, CustomerModel.class));
+        if (existsByDocumentType(customerRequest.getDocumentType())) {
+            throw new ExceptionConflict("Conflict: Document Type is already in use!");
+        }
+       CustomerModel save = customerRepository.save(mapper.map(customerRequest,CustomerModel.class));
+        return mapper.map(save, CustomerResponse.class);
+
+    }
+
+    private boolean existsByDocumentType(DocumentType documentType) {
+        return customerRepository.existsByDocumentType();
     }
 
     public CustomerRequest findAllId(UUID id){
       return customerRepository.findById(id)
               .map(customer -> mapper.map(customer, CustomerRequest.class))
-              .orElseThrow(()-> new RuntimeException("Customer not found."));
+              .orElseThrow(()-> new EmptyResultDataAccessException(1));
     }
     @Transactional
     public void deleteById(UUID id){
       Optional<CustomerModel> customerModelOptional = customerRepository.findById(id);
-      customerModelOptional.orElseThrow(() -> new RuntimeException("Customer not foud."));
+      customerModelOptional.orElseThrow(() -> new EmptyResultDataAccessException(1));
       customerRepository.deleteById(id);
     }
 
-    public CustomerModel update(CustomerRequest customerRequest){
-        var customerModel = new CustomerModel();
+    public CustomerResponse update(UUID id, CustomerRequest customerRequest){
+        var customerModel = customerRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException(1));
+
       if(existsById(customerModel.getId())){
-          return customerRepository.save(mapper.map(customerRequest, CustomerModel.class));
+          CustomerModel save = customerRepository.save(mapper.map(customerRequest, CustomerModel.class));
+          return mapper.map(save, CustomerResponse.class);
       }else{
-          throw new RuntimeException("Customer not foud.");
+          throw new EmptyResultDataAccessException(1);
       }
     }
     public boolean existsByDocument(String document) {

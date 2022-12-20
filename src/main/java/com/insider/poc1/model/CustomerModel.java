@@ -1,7 +1,5 @@
 package com.insider.poc1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.insider.poc1.enums.DocumentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

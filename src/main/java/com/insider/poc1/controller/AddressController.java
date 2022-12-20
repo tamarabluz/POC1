@@ -53,12 +53,14 @@ public class AddressController {
     public AddressResponse updateAddress(@PathVariable(value = "id") UUID id,
                                          @RequestBody @Valid AddressModel addressModel) {
         addressModel.setId(id);
-        addressService.update(new AddressRequest());
+        addressService.update(id, new AddressRequest());
         return mapper.map(addressService.findAllId(id), AddressResponse.class);
     }
-    @PatchMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddressResponse addNewAddress(@RequestBody @Valid AddressRequest addressRequest){
-        return (mapper.map(addressService.addNewAddress(addressRequest), AddressResponse.class));
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AddressResponse AddressUpdate(@RequestBody @Valid UUID id){
+        addressService.AddressUpdate(id);
+        return mapper.map(addressService.findById(id), AddressResponse.class);
+
     }
 }
