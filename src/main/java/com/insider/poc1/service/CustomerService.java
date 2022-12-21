@@ -46,7 +46,6 @@ public class CustomerService {
     }
 
 
-
     public CustomerRequest findAllId(UUID id){
       return customerRepository.findById(id)
               .map(customer -> mapper.map(customer, CustomerRequest.class))
@@ -101,6 +100,10 @@ public class CustomerService {
     }
 
 
+    public Page<CustomerResponse> findCustomerByName(Pageable pageable, String name) {
+        return customerRepository.findByNameContains(pageable, name)
+                .map(customer -> mapper.map(customer, CustomerResponse.class));
+    }
 }
 
 

@@ -86,7 +86,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             return fieldError.getDefaultMessage().concat("Format invalid");
         }
         if (fieldError.getCode().equals(CONSTANT_VALIDATION_CPF)) {
-            return fieldError.getDefaultMessage().concat("Format innvalid");
+            return fieldError.getDefaultMessage().concat("Format invalid");
         }
         return fieldError.toString()
 ;    }

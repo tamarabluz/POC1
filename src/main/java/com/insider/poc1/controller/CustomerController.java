@@ -36,7 +36,7 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<Page<CustomerResponse>> getAllCustomer(@PageableDefault(page = 0,
-            size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+            size = 10, sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable)
                 .map(customer -> (mapper.map(customer, CustomerResponse.class))));
     }
@@ -49,18 +49,25 @@ public class CustomerController {
 
     @GetMapping("/document-type/{documentType}")
     public ResponseEntity<Page<CustomerResponse>> getAllCustomerByType(@PageableDefault(page = 0,
-            size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, @PathVariable DocumentType documentType) {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable, documentType));
+            size = 10, sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable, @PathVariable DocumentType documentType) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable, documentType)
+                .map(customer -> (mapper.map(customer, CustomerResponse.class))));
     }
+    @GetMapping("/filter")
+    public Page<CustomerResponse> findCustomerByName(@PageableDefault(page = 0,
+            size = 10, sort = {"name"}, direction = Sort.Direction.ASC) Pageable pageable, @RequestParam String name) {
+        return customerService.findCustomerByName(pageable,name);
 
+
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletecustomer(@PathVariable(value = "id") UUID id) {
         customerService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Customer deleted successfully");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Customer deleted successfully");
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public CustomerResponse updateCustomer(@PathVariable(value = "id") UUID id,
                                            @RequestBody @Valid CustomerModel customerModel) {
         customerModel.setId(id);

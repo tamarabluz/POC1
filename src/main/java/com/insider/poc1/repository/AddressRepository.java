@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface AddressRepository extends JpaRepository<AddressModel, UUID>{
+public interface AddressRepository extends JpaRepository<AddressModel, UUID> {
 
     boolean existsByLogradouroAndNumero(String logradouro, int numero);
 }

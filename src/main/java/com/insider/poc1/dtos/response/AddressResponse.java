@@ -17,5 +17,6 @@ public class AddressResponse {
     private String localidade;
 
     private String uf;
+    private Boolean isAddressPrincipal = false;
 
 }

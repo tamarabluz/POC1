@@ -18,6 +18,5 @@ public class CustomerResponse {
         private String email;
         private List<AddressResponse> addressList = new ArrayList<>();
 
-
 }
 

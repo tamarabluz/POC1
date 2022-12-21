@@ -49,10 +49,10 @@ public class AddressController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAddress(@PathVariable(value = "id") UUID id) {
         addressService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Address deleted successfully");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Address deleted successfully");
     }
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public AddressResponse updateAddress(@PathVariable(value = "id") UUID id,
                                          @RequestBody @Valid AddressModel addressModel) {
         addressModel.setId(id);
@@ -60,7 +60,7 @@ public class AddressController {
         return mapper.map(addressService.findAllId(id), AddressResponse.class);
     }
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public AddressResponse AddressUpdate(@RequestBody @Valid UUID id){
         addressService.AddressUpdate(id);
         return mapper.map(addressService.findById(id), AddressResponse.class);
