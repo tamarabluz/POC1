@@ -2,12 +2,15 @@ package com.insider.poc1.controller;
 
 import com.insider.poc1.dtos.request.CustomerRequest;
 import com.insider.poc1.dtos.response.CustomerResponse;
+import com.insider.poc1.dtos.response.NewCustomerResponse;
 import com.insider.poc1.enums.DocumentType;
 import com.insider.poc1.model.CustomerModel;
 import com.insider.poc1.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +26,7 @@ import java.util.*;
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/v1/customers")
+@RequestMapping("/customers")
 
 public class CustomerController {
 
@@ -31,6 +34,7 @@ public class CustomerController {
     private final ModelMapper mapper;
 
     @PostMapping
+    @CacheEvict(cacheNames = "customers", allEntries = true)
     @Operation(summary = "Created Customer.")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerResponse saveCustomer(@RequestBody @Valid CustomerRequest customerRequest) {
@@ -44,7 +48,14 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable)
                 .map(customer -> (mapper.map(customer, CustomerResponse.class))));
     }
+    @GetMapping("v2/{id}")
+    @Operation(summary = "Return one Customer.")
+    @ResponseStatus(HttpStatus.OK)
+    public NewCustomerResponse getOneNewCustomerResponse(@PathVariable(value = "id") UUID id) {
+        return mapper.map(customerService.findByIdNewResponse(id), NewCustomerResponse.class);
+    }
 
+    @Cacheable(value = "customers", key = "#id")
     @GetMapping("/{id}")
     @Operation(summary = "Return one Customer.")
     @ResponseStatus(HttpStatus.OK)
@@ -68,6 +79,7 @@ public class CustomerController {
 
     }
     @DeleteMapping("/{id}")
+    @CacheEvict(cacheNames = "customers", key = "#Id")
     @Operation(summary = "Delete Customers.")
     public ResponseEntity<Object> deletecustomer(@PathVariable(value = "id") UUID id) {
         customerService.deleteById(id);
@@ -75,6 +87,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(cacheNames = "customers", key = "#Id")
     @Operation(summary = "Update Customer.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public CustomerResponse updateCustomer(@PathVariable(value = "id") UUID id,

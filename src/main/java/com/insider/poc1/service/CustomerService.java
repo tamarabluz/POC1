@@ -2,6 +2,7 @@ package com.insider.poc1.service;
 
 import com.insider.poc1.dtos.request.CustomerRequest;
 import com.insider.poc1.dtos.response.CustomerResponse;
+import com.insider.poc1.dtos.response.NewCustomerResponse;
 import com.insider.poc1.enums.DocumentType;
 import com.insider.poc1.exception.ExceptionConflict;
 import com.insider.poc1.model.CustomerModel;
@@ -104,6 +105,12 @@ public class CustomerService {
     public Page<CustomerResponse> findCustomerByName(Pageable pageable, String name) {
         return customerRepository.findByNameContains(pageable, name)
                 .map(customer -> mapper.map(customer, CustomerResponse.class));
-    }}
+    }
+
+    public Optional<NewCustomerResponse> findByIdNewResponse(UUID id) {
+        return customerRepository.findById(id).map(customerModel -> mapper.map(customerModel, NewCustomerResponse.class));
+    }
+}
+
 
 

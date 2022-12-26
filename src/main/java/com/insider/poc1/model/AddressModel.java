@@ -1,19 +1,17 @@
 package com.insider.poc1.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.insider.poc1.dtos.response.CustomerResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -42,6 +40,9 @@ public class AddressModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private CustomerModel customerModel;
+
+    @Version
+    private Long version;
 
 
 

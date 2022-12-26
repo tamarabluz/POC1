@@ -4,6 +4,8 @@ import com.insider.poc1.enums.DocumentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 @Entity
 @Data
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -38,4 +41,7 @@ public class CustomerModel implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customerModel")
     private List<AddressModel> addressList = new ArrayList<>();
+
+    @Version
+    private Long version;
 }
