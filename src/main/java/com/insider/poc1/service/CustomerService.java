@@ -37,9 +37,10 @@ public class CustomerService {
             if (existsByPhoneNumber(customerRequest.getPhoneNumber())) {
                throw new ExceptionConflict("Conflict: Phone Number is already in use!");
             }
-        if (existsByDocumentType(customerRequest.getDocumentType())) {
-            throw new ExceptionConflict("Conflict: Document Type is already in use!");
-        }
+//        if (existsByDocumentType(customerRequest.getDocumentType())) {
+//            throw new ExceptionConflict("Conflict: Document Type is already in use!");
+//        }
+
        CustomerModel save = customerRepository.save(mapper.map(customerRequest,CustomerModel.class));
         return mapper.map(save, CustomerResponse.class);
 
@@ -103,7 +104,6 @@ public class CustomerService {
     public Page<CustomerResponse> findCustomerByName(Pageable pageable, String name) {
         return customerRepository.findByNameContains(pageable, name)
                 .map(customer -> mapper.map(customer, CustomerResponse.class));
-    }
-}
+    }}
 
 

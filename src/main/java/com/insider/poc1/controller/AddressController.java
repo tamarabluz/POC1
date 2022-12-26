@@ -4,6 +4,7 @@ import com.insider.poc1.dtos.request.AddressRequest;
 import com.insider.poc1.dtos.response.AddressResponse;
 import com.insider.poc1.model.AddressModel;
 import com.insider.poc1.service.AddressService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,8 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/addresses")
+@RequestMapping("/v1/addresses")
+@CrossOrigin(origins = "*",  maxAge = 3600)
 public class AddressController {
 
     private final AddressService addressService;
@@ -29,11 +31,13 @@ public class AddressController {
     }
 
     @PostMapping
+    @Operation( summary = "Created Addresses.")
     @ResponseStatus(HttpStatus.CREATED)
     public AddressResponse save(@RequestBody @Valid AddressRequest addressRequest)  {
         return (mapper.map(addressService.save(addressRequest), AddressResponse.class));
     }
     @GetMapping
+    @Operation(summary = "Return all Addresses.")
     public ResponseEntity<Page<AddressResponse>> getAllAddress(@PageableDefault(page = 0,
             size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(addressService.findAll(pageable)
@@ -41,17 +45,20 @@ public class AddressController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Return One Addresses for id.")
     @ResponseStatus(HttpStatus.OK)
     public AddressResponse getOneAddress(@PathVariable(value = "id") UUID id) {
         return mapper.map(addressService.findById(id), AddressResponse.class);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete Address.")
     public ResponseEntity<Object> deleteAddress(@PathVariable(value = "id") UUID id) {
         addressService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Address deleted successfully");
     }
     @PutMapping("/{id}")
+    @Operation(summary = "Update Address.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public AddressResponse updateAddress(@PathVariable(value = "id") UUID id,
                                          @RequestBody @Valid AddressModel addressModel) {
@@ -60,6 +67,7 @@ public class AddressController {
         return mapper.map(addressService.findAllId(id), AddressResponse.class);
     }
     @PatchMapping("/{id}")
+    @Operation(summary = "Addresses")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public AddressResponse AddressUpdate(@RequestBody @Valid UUID id){
         addressService.AddressUpdate(id);

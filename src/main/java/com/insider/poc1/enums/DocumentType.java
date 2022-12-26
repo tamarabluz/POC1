@@ -3,8 +3,11 @@ package com.insider.poc1.enums;
 import com.insider.poc1.config.documents.CnpjGroup;
 import com.insider.poc1.config.documents.CpfGroup;
 
+
 public enum DocumentType {
+
     PJ("Jurídica", "CNPJ", "00.000.000/0000-00", CnpjGroup.class),
+
     PF("Física", "CPF", "000.000.000-00", CpfGroup.class);
 
     private final String descricao;

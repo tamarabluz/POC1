@@ -14,27 +14,32 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-
 @Data
+
 @GroupSequenceProvider(ClienteGroupSequenceProvider.class)
 public class CustomerRequest {
 
-    @NotBlank(message = "Name")
-    @Length(message = "NAME", min = 10, max = 50)
+    @NotBlank(message = "Name ",groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
+    @Length(message = "Name ", min = 10, max = 50, groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
     private String name;
-    @NotBlank(message = "Email")
-    @Email
+    @NotBlank(message = "Email ",  groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
+    @Email(message = "Email ", groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
     private String email;
-    @NotBlank(message = "Phone Number")
+    @NotBlank(message = "Phone Number ", groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
     private String phoneNumber;
-    @NotBlank(message = "Document")
+    @NotBlank(message = "Document ", groups = {CpfGroup.class, CnpjGroup.class})
     @CPF(groups = CpfGroup.class)
-    @CNPJ(groups = CnpjGroup.class)
+    @CNPJ(groups =  CnpjGroup.class)
     private String document;
-    @NotNull(message = "Document Type.")
+    @NotNull(message = "Document Type ", groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
     private DocumentType documentType;
 
 }
+
+
+
+
+
 
 
 
