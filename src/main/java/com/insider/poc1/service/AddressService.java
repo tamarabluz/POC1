@@ -68,14 +68,28 @@ public class AddressService {
         if (existsByLogradouroAndNumero(addressRequest.getLogradouro(), addressRequest.getNumero())){
             throw new ExceptionConflict("Conflict: Logradouro and numero is already in use!");
         }
-        if (customer.getAddressList().isEmpty()) {
-            addressRequest.setIsAddressPrincipal(true);
-        }
-        if (customer.getAddressList().size() >= 5) {
+        addressRequest.setCustomerModelId(customer.getId());
+
+        AddressModel save = addressRepository.save(mapper.map(addressRequest, AddressModel.class));
+
+        if (customer.getAddressList().size() <= 4) {
+            if (customer.getAddressList().isEmpty()) {
+                save.setIsAddressPrincipal(true);
+            }
+            for (int i= 0; i < customer.getAddressList().size(); i++){
+                if(customer.getAddressList().get(i).getIsAddressPrincipal() && save.getIsAddressPrincipal()){
+                    customer.getAddressList().get(i).setIsAddressPrincipal(false);
+                }
+
+            }
+        }else {
             throw new RuntimeException("You already have 5 addresses in use");
         }
-        AddressModel save = addressRepository.save(mapper.map(addressRequest, AddressModel.class));
-        return mapper.map(save, AddressResponse.class);
+
+        customer.getAddressList().add(save);
+        save.setCustomerModel(customer);
+        customerRepository.save(customer);
+    return mapper.map(save, AddressResponse.class);
     }
 
     private boolean existsByLogradouroAndNumero(String logradouro, int numero)  {

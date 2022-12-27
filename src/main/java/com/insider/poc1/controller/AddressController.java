@@ -31,7 +31,7 @@ public class AddressController {
     }
 
     @PostMapping
-    @Operation( summary = "Created Addresses.")
+    @Operation(summary = "Created Addresses.")
     @ResponseStatus(HttpStatus.CREATED)
     public AddressResponse save(@RequestBody @Valid AddressRequest addressRequest)  {
         return (mapper.map(addressService.save(addressRequest), AddressResponse.class));
@@ -55,7 +55,7 @@ public class AddressController {
     @Operation(summary = "Delete Address.")
     public ResponseEntity<Object> deleteAddress(@PathVariable(value = "id") UUID id) {
         addressService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Address deleted successfully");
+        return ResponseEntity.status(HttpStatus.OK).body("Address deleted successfully");
     }
     @PutMapping("/{id}")
     @Operation(summary = "Update Address.")

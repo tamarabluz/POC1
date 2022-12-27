@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.UUID;
 
 
 @RestController
@@ -83,7 +83,7 @@ public class CustomerController {
     @Operation(summary = "Delete Customers.")
     public ResponseEntity<Object> deletecustomer(@PathVariable(value = "id") UUID id) {
         customerService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Customer deleted successfully");
+        return ResponseEntity.status(HttpStatus.OK).body("Customer deleted successfully");
     }
 
     @PutMapping("/{id}")
@@ -93,7 +93,7 @@ public class CustomerController {
     public CustomerResponse updateCustomer(@PathVariable(value = "id") UUID id,
                                            @RequestBody @Valid CustomerModel customerModel) {
         customerModel.setId(id);
-        customerService.update(id, new CustomerRequest());
+        customerService.update(id, new CustomerRequest());//    @CacheEvict(cacheNames = "customers", key = "#Id")
         return mapper.map(customerService.findAllId(id), CustomerResponse.class);
     }
 

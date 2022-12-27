@@ -1,4 +1,4 @@
-package com.insider.poc1.config.swagger;
+package com.insider.poc1.config.openapi;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

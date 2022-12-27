@@ -19,19 +19,19 @@ import javax.validation.constraints.NotNull;
 @GroupSequenceProvider(ClienteGroupSequenceProvider.class)
 public class CustomerRequest {
 
-    @NotBlank(message = "Name ",groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
-    @Length(message = "Name ", min = 10, max = 50, groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
+    @NotBlank(message = "Name ")
+    @Length(message = "Name ")
     private String name;
-    @NotBlank(message = "Email ",  groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
-    @Email(message = "Email ", groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
+    @NotBlank(message = "Email ")
+    @Email(message = "Email ")
     private String email;
-    @NotBlank(message = "Phone Number ", groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
+    @NotBlank(message = "Phone Number ")
     private String phoneNumber;
-    @NotBlank(message = "Document ", groups = {CpfGroup.class, CnpjGroup.class})
+    @NotBlank(message = "Document ")
     @CPF(groups = CpfGroup.class)
     @CNPJ(groups =  CnpjGroup.class)
     private String document;
-    @NotNull(message = "Document Type ", groups = {CustomerRequest.class, CpfGroup.class, CnpjGroup.class})
+    @NotNull(message = "Document Type ")
     private DocumentType documentType;
 
 }

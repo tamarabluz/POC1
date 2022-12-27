@@ -37,7 +37,7 @@ public class AddressModel {
     private String uf;
     @Column
     private Boolean isAddressPrincipal;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private CustomerModel customerModel;
 
