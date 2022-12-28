@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.insider.poc1.dtos.request.AddressRequest;
 import com.insider.poc1.dtos.response.AddressResponse;
 import com.insider.poc1.exception.ExceptionConflict;
+import com.insider.poc1.exception.Exceptions;
 import com.insider.poc1.model.AddressModel;
 import com.insider.poc1.repository.AddressRepository;
 import com.insider.poc1.repository.CustomerRepository;
@@ -39,7 +40,7 @@ public class AddressService {
     public AddressResponse save(AddressRequest addressRequest) {
 
         var customer = customerRepository.findById(addressRequest.getCustomerModelId())
-                .orElseThrow(() -> new RuntimeException("Customer not foud."));
+                .orElseThrow(() -> new EmptyResultDataAccessException("Id not found", 1));
         try {
 
             URL url = new URL("https://viacep.com.br/ws/" + addressRequest.getCep() + "/json/");//Define a url;
@@ -62,8 +63,8 @@ public class AddressService {
             addressRequest.setBairro(addressCep.getBairro());
             addressRequest.setLocalidade(addressCep.getLocalidade());
             addressRequest.setUf(addressCep.getUf());
-        } catch (Exception e) {
-            throw new RuntimeException("Invalid Cep.");
+        } catch (java.lang.Exception e) {
+            throw new Exceptions("Invalid Cep.");
         }
         if (existsByLogradouroAndNumero(addressRequest.getLogradouro(), addressRequest.getNumero())){
             throw new ExceptionConflict("Conflict: Logradouro and numero is already in use!");
@@ -83,7 +84,7 @@ public class AddressService {
 
             }
         }else {
-            throw new RuntimeException("You already have 5 addresses in use");
+            throw new Exceptions("You already have 5 addresses in use");
         }
 
         customer.getAddressList().add(save);
@@ -100,13 +101,13 @@ public class AddressService {
     public AddressRequest findAllId(UUID id) {
         return addressRepository.findById(id)
                 .map(address -> mapper.map(address, AddressRequest.class))
-                .orElseThrow(() -> new EmptyResultDataAccessException(1));
+                .orElseThrow(() -> new EmptyResultDataAccessException("Id not found",1));
     }
 
     @Transactional
     public void deleteById(UUID id) {
         Optional<AddressModel> addressModelOptional = addressRepository.findById(id);
-        addressModelOptional.orElseThrow(() -> new EmptyResultDataAccessException(1));
+        addressModelOptional.orElseThrow(() -> new EmptyResultDataAccessException("Address not foud", 1));
         addressRepository.deleteById(id);
     }
 
@@ -117,7 +118,7 @@ public class AddressService {
             return mapper.map(save, AddressResponse.class);
 
         } else {
-            throw new RuntimeException("Address not foud.");
+            throw new EmptyResultDataAccessException("Address not foud.", 1);
         }
 
     }
