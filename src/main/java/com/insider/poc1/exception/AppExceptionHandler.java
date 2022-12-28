@@ -46,9 +46,17 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, errorMessageResponses, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
+    @ExceptionHandler({Exceptions.class})
+    public ResponseEntity<Object> handleExceptions(Exceptions e, WebRequest request){
+        String messageUser = e.getMessage();
+        String messageDev = e.toString();
+        List<ErrorMessageResponse> errorMessageResponses = Arrays.asList(new ErrorMessageResponse(messageUser, messageDev));
+        return handleExceptionInternal(e, errorMessageResponses, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException e, WebRequest request){
-        String messageUser = "Id not foud.";
+        String messageUser = " not foud.";
         String messageDev = e.toString();
         List<ErrorMessageResponse> errorMessageResponses = Arrays.asList(new ErrorMessageResponse(messageUser, messageDev));
         return handleExceptionInternal(e, errorMessageResponses, new HttpHeaders(), HttpStatus.NOT_FOUND, request);

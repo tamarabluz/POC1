@@ -72,9 +72,9 @@ public class CustomerController {
     }
     @GetMapping("/filter")
     @Operation(summary = "Filter all Customers.")
-    public Page<CustomerResponse> findCustomerByName(@PageableDefault(page = 0,
+    public ResponseEntity<Page<CustomerResponse>> findCustomerByName(@PageableDefault(page = 0,
             size = 10, sort = {"name"}, direction = Sort.Direction.ASC) Pageable pageable, @RequestParam String name) {
-        return customerService.findCustomerByName(pageable,name);
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findCustomerByName(pageable,name));
 
 
     }
@@ -89,11 +89,11 @@ public class CustomerController {
     @PutMapping("/{id}")
     @CacheEvict(cacheNames = "customers", key = "#Id")
     @Operation(summary = "Update Customer.")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public CustomerResponse updateCustomer(@PathVariable(value = "id") UUID id,
                                            @RequestBody @Valid CustomerModel customerModel) {
         customerModel.setId(id);
-        customerService.update(id, new CustomerRequest());//    @CacheEvict(cacheNames = "customers", key = "#Id")
+        customerService.update(id, new CustomerRequest());
         return mapper.map(customerService.findAllId(id), CustomerResponse.class);
     }
 

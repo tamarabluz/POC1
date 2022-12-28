@@ -38,9 +38,6 @@ public class CustomerService {
             if (existsByPhoneNumber(customerRequest.getPhoneNumber())) {
                throw new ExceptionConflict("Conflict: Phone Number is already in use!");
             }
-//        if (existsByDocumentType(customerRequest.getDocumentType())) {
-//            throw new ExceptionConflict("Conflict: Document Type is already in use!");
-//        }
 
        CustomerModel save = customerRepository.save(mapper.map(customerRequest,CustomerModel.class));
         return mapper.map(save, CustomerResponse.class);
@@ -51,24 +48,24 @@ public class CustomerService {
     public CustomerRequest findAllId(UUID id){
       return customerRepository.findById(id)
               .map(customer -> mapper.map(customer, CustomerRequest.class))
-              .orElseThrow(()-> new EmptyResultDataAccessException(1));
+              .orElseThrow(()-> new EmptyResultDataAccessException("Id not foud.", 1));
     }
     @Transactional
     public void deleteById(UUID id){
       Optional<CustomerModel> customerModelOptional = customerRepository.findById(id);
-      customerModelOptional.orElseThrow(() -> new EmptyResultDataAccessException(1));
+      customerModelOptional.orElseThrow(() -> new EmptyResultDataAccessException("Customer not foud.", 1));
       customerRepository.deleteById(id);
     }
 
     public CustomerResponse update(UUID id, CustomerRequest customerRequest){
         var customerModel = customerRepository.findById(id).orElseThrow(
-                () -> new EmptyResultDataAccessException(1));
+                () -> new EmptyResultDataAccessException("Id not foud.", 1));
 
       if(existsById(customerModel.getId())){
           CustomerModel save = customerRepository.save(mapper.map(customerRequest, CustomerModel.class));
           return mapper.map(save, CustomerResponse.class);
       }else{
-          throw new EmptyResultDataAccessException(1);
+          throw new EmptyResultDataAccessException("Id not foud.",1);
       }
     }
     public boolean existsByDocument(String document) {
