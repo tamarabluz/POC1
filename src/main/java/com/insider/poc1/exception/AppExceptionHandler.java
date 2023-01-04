@@ -56,7 +56,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException e, WebRequest request){
-        String messageUser = " not foud.";
+        String messageUser = e.getMessage();
         String messageDev = e.toString();
         List<ErrorMessageResponse> errorMessageResponses = Arrays.asList(new ErrorMessageResponse(messageUser, messageDev));
         return handleExceptionInternal(e, errorMessageResponses, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
