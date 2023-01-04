@@ -26,6 +26,7 @@ public class CustomerService {
   private final ModelMapper mapper;
 
 
+
     @Transactional//garante que se tudo volte ao normal, que não tenha dados quebrados;
     public CustomerResponse save(CustomerRequest customerRequest) {
 
@@ -45,29 +46,35 @@ public class CustomerService {
     }
 
 
-    public CustomerRequest findAllId(UUID id){
-      return customerRepository.findById(id)
-              .map(customer -> mapper.map(customer, CustomerRequest.class))
-              .orElseThrow(()-> new EmptyResultDataAccessException("Id not foud.", 1));
+    public CustomerRequest findCustomerById(UUID id){
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+        return customerRepository.findById(id)
+                .map(customer -> mapper.map(customer, CustomerRequest.class))
+                .orElseThrow(() -> new EmptyResultDataAccessException("Id not found.", 1));
     }
     @Transactional
     public void deleteById(UUID id){
       Optional<CustomerModel> customerModelOptional = customerRepository.findById(id);
-      customerModelOptional.orElseThrow(() -> new EmptyResultDataAccessException("Customer not foud.", 1));
+      customerModelOptional.orElseThrow(() -> new EmptyResultDataAccessException("Customer not found.", 1));
       customerRepository.deleteById(id);
     }
 
-    public CustomerResponse update(UUID id, CustomerRequest customerRequest){
-        var customerModel = customerRepository.findById(id).orElseThrow(
-                () -> new EmptyResultDataAccessException("Id not foud.", 1));
+    public CustomerResponse update(UUID id, CustomerRequest customerRequest) {
+        try {
+            var customerModel = customerRepository.findById(id).orElseThrow(
+                    () -> new EmptyResultDataAccessException("Id not found.", 1));
+            mapper.map(customerRequest, customerModel);
 
-      if(existsById(customerModel.getId())){
-          CustomerModel save = customerRepository.save(mapper.map(customerRequest, CustomerModel.class));
-          return mapper.map(save, CustomerResponse.class);
-      }else{
-          throw new EmptyResultDataAccessException("Id not foud.",1);
-      }
+            CustomerModel updatedCustomerModel = customerRepository.save(customerModel);
+            return mapper.map(updatedCustomerModel, CustomerResponse.class);
+        } catch (EmptyResultDataAccessException ex) {
+            throw ex;
+        }
     }
+
+
     public boolean existsByDocument(String document) {
         return customerRepository.existsByDocument(document);
     }
@@ -79,25 +86,15 @@ public class CustomerService {
     public boolean existsByPhoneNumber(String phoneNumber) {
         return customerRepository.existsByPhoneNumber(phoneNumber);
     }
-    public boolean existsById(UUID id){
-      return customerRepository.existsById(id);
-    }
+
     public Page<CustomerResponse> findAll(Pageable pageable) {
         return customerRepository.findAll(pageable)
-                .map(c -> mapper.map(c, CustomerResponse.class));
-    }
-    public Optional<CustomerResponse> findById(UUID id) {
-        return customerRepository.findById(id)
                 .map(c -> mapper.map(c, CustomerResponse.class));
     }
      public Page<CustomerResponse> findAll(Pageable pageable, DocumentType documentType) {
          return customerRepository.findAllCustomerByDocumentType(pageable, documentType)
                  .map(c -> mapper.map(c, CustomerResponse.class));
      }
-    private boolean existsByDocumentType(DocumentType documentType) {
-        return customerRepository.existsByDocumentType(documentType);
-    }
-
 
     public Page<CustomerResponse> findCustomerByName(Pageable pageable, String name) {
         return customerRepository.findByNameContains(pageable, name)

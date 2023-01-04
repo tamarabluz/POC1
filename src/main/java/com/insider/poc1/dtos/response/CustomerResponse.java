@@ -7,7 +7,6 @@ import java.util.List;
 
 
 @Data
-
 public class CustomerResponse {
 
         private String name;
@@ -15,5 +14,7 @@ public class CustomerResponse {
         private String email;
         private List<AddressResponse> addressList = new ArrayList<>();
 
+        public CustomerResponse() {
+        }
 }
 

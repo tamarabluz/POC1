@@ -60,7 +60,7 @@ public class CustomerController {
     @Operation(summary = "Return one Customer.")
     @ResponseStatus(HttpStatus.OK)
     public CustomerResponse getOneCustomer(@PathVariable(value = "id") UUID id) {
-        return mapper.map(customerService.findById(id), CustomerResponse.class);
+        return mapper.map(customerService.findCustomerById(id), CustomerResponse.class);
     }
 
     @GetMapping("/document-type/{documentType}")
@@ -94,7 +94,7 @@ public class CustomerController {
                                            @RequestBody @Valid CustomerModel customerModel) {
         customerModel.setId(id);
         customerService.update(id, new CustomerRequest());
-        return mapper.map(customerService.findAllId(id), CustomerResponse.class);
+        return mapper.map(customerService.findCustomerById(id), CustomerResponse.class);
     }
 
 

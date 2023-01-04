@@ -2,6 +2,7 @@ package com.insider.poc1.model;
 
 import com.insider.poc1.enums.DocumentType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OptimisticLockType;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 @Entity
 @Data
+@Builder
 @OptimisticLocking(type = OptimisticLockType.VERSION)
 @AllArgsConstructor
 @NoArgsConstructor
